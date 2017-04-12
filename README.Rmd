@@ -6,9 +6,12 @@ output: html_document
 ---
 ```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-lapply(list("dplyr", "rvest", "stringr", "xlsx", "readxl","seleniumPipes",
-            "regexPipes", "gtools","readxl",'lubridate','ggplot2','alr3','gridExtra'), require, c = 1)
-setwd('/Users/Alex/Desktop/datavis')
+
+lapply(list("tidyverse","lubridate","magrittr"
+,"ggplot2","alr3","gridExtra"), require, c=1)
+
+mymonths <- c("Jan","Feb","Mar", "Apr","May","Jun",
+              "Jul","Aug","Sep", "Oct","Nov","Dec")
 ```
 
 ### About
@@ -22,14 +25,8 @@ I will only focus on the 4 biggest airlines with combined market share of about 
 * United
 
 
-### Load and Inspect
-First, load and inspect the data. There are 12217 observations and 22 variables:
-```{r include=TRUE, echo=FALSE}
-df <- read.csv('./655176550_12017_3428_airline_delay_causes.csv', header = TRUE)
-str(df)
-```
 
-## Reshaping
+## Load and Reshape
 
 I am only interested in 4 airlines. Moreover, I only want to look at delays due
 to the carrier. Therefore I only leave variables and airlines of interest.
@@ -41,36 +38,24 @@ Variables include:
 * total minutes delayed because of carrier (carrier_delay)
 
 ```{r include=TRUE, echo=FALSE}
-#select variables of interest
-df <- subset(df, select = c('year','arr_del15','arr_flights','X.month','carrier','X.arr_delay',
-                            'X.carrier_delay', 'carrier_name'))
-#rename columns
-newnames = list('year','delayed','arrivals','month',
-                'carrier','delay','delay_car','carrier_name')
-colnames(df) <- newnames
+df <-
+  read.csv("./655176550_12017_3428_airline_delay_causes.csv") %>% ## import data
+  filter(grepl("AA|DL|WN|UA", carrier)) %>%                   ## subset
+  select(year, arr_del15, arr_flights, X.month, carrier       ## choose columns
+       , X.arr_delay, X.carrier_delay, carrier_name, -X) %>%  ##
+  na.omit %>%                                                 ## only complete cases
+  set_colnames(c("year", "delayed", "arrivals", "month"       ## rename columns
+               , "carrier", "delay", "delay_car", "carrier_name")) %>%
+  mutate(
+    date = ymd(paste(year, month, 1, sep="-")),               ## date column
+    carrier = as.factor(as.character(carrier)),               ## factorize
+    month = as.integer(month) %>%                             ## factorize
+      plyr::mapvalues(1:12, mymonths) %>%
+      factor(levels = mymonths)
+  )
 
-#select carriers of interest
-df <- subset(df, df$carrier %in% c('AA','DL', 'WN', 'UA'))
-#omit NAs
-df <- df[complete.cases(df),]
-#create date variable
-df$date <- as.Date(paste(df$year, df$month, 1, sep='-'), format="%Y-%m-%d")
-#to get rid of empty factors
-df$carrier <- as.factor(as.character(df$carrier))
 
-str(df)
-table(df$month)
-table(df$carrier)
 
-#create a date variable, convert month numbers into month names, ordered.
-df$month <- as.integer(df$month)
-df$date <- as.Date(paste(2016, df$month, 1, sep='-'), format="%Y-%m-%d")
-mymonths <- c("Jan","Feb","Mar",
-              "Apr","May","Jun",
-              "Jul","Aug","Sep",
-              "Oct","Nov","Dec")
-df$month <- as.factor(mymonths[df$month])
-df$month <- ordered(df$month, levels = mymonths)
 ```
 
 ### Summarise
@@ -82,9 +67,7 @@ I group by month and carrier and calculate two ratios:
 ```{r include=TRUE, echo=FALSE}
 
 groups <- group_by(df,date, carrier_name)
-df1 <- summarise(groups, delayed_flight_share = sum(delayed) / sum(arrivals), carrier_share_min = sum(delay_car) / sum(delay)) %>% ungroup()
-
-df1 <- df1 %>% arrange(date)
+df1 <- summarise(groups, delayed_flight_share = sum(delayed) / sum(arrivals), carrier_share_min = sum(delay_car) / sum(delay)) %>% ungroup() %>% arrange(date)
 
 
 ```
