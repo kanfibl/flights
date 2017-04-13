@@ -48,7 +48,9 @@ I impoved my initial R plots in the following ways:
 * put the legend in the top right corner
 * put limits on the y-axis in order to make a better comparison between airlines. Having a 100% axis would have flatted out the lines and made the interpretation difficult.
 
-The initial visualization can be seen in `index_initial.html`.
+The initial visualization can be seen in `index_initial.html` or below:
+![initial](https://raw.githubusercontent.com/kanfibl/flights/master/initial.png)
+Howewer, to interact with the graph and see the data values in detail for each circle, the html version should be accessed.
 
 ## Feedback
 
@@ -98,6 +100,7 @@ Instead, I decided to add another graph (coincidentally  moving back to the init
 
 The final version can be viewed at `index_final.html` or below:
 ![final](https://raw.githubusercontent.com/kanfibl/flights/master/final.png)
+To interact with the graph and see the data values in detail for each circle, the html version should be accessed.
 
 ## Resources
 
