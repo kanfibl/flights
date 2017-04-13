@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <style>
+      h2 {
+        color: black;
+        text-align: left;
+      }
+    </style>
+
+    <script type="text/javascript">
+
+      function draw(data) {
+      
+      d3.select('body')
+          .append('h2')
+          .attr('id', 'title')
+          .text('Flight delays at US Major Airlines in 2016');
+          
+
+          "use strict";
+          var margin = 0,
+              width = 1600 - margin,
+              height = 700 - margin;
+
+          //adding the first graph
+          var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", width / 2)
+                        .attr("height", height / 2)
+                        .append('g')
+                        .attr('class','chart');
+
+          var myChart = new dimple.chart(svg, data);
+
+          //assigning axes
+          var x = myChart.addTimeAxis("x", "date"); 
+          x.tickFormat = '%b';
+          x.title = 'month';
+          var y = myChart.addMeasureAxis("y", "delayed flights");
+          y.title = 'delayed';
+          y.tickFormat = ',.1%';
+          y.overrideMin = 0.05;
+          y.overrideMax = 0.3;
+          
+          var z = myChart.addMeasureAxis("z", "delay time due to carrier");
+          z.tickFormat = ',.1%';
+          z.overrideMax = 1.5;
+
+          //adding series
+          
+          var lines = myChart.addSeries('carrier', dimple.plot.line);
+          lines.lineWeight = 1;
+          var dots = myChart.addSeries('carrier', dimple.plot.scatter);
+          
+          
+
+          //coloring
+          myChart.assignColor("American Airlines Inc.","#FF8000");
+          myChart.assignColor("Southwest Airlines Co.","#0000FF");
+          myChart.assignColor("United Air Lines Inc.","#FA58F4");
+          myChart.assignColor("Delta Air Lines Inc.","#01DFA5");
+          myChart.addLegend(500, 42, 200, 200, "right");
+          
+
+          myChart.draw();
+
+          //adding the second graph
+          var svg2 = d3.select("body")
+                        .append("svg")
+                        .attr("width", width / 2)
+                        .attr("height", height / 2)
+                        .append('g')
+                        .attr('class','chart2');
+
+          
+          var myChart2 = new dimple.chart(svg2, data);
+          
+          //assigning axes
+          var x2 = myChart2.addTimeAxis("x", "date"); 
+          x2.tickFormat = '%b';
+          x2.title = 'month';
+          var y2 = myChart2.addMeasureAxis("y", "delay time due to carrier");
+          y2.title = 'due to the carrier';
+          y2.tickFormat = ',.1%';
+          y2.overrideMin = 0.2;
+          y2.overrideMax = 0.55;
+          var z2 = myChart2.addMeasureAxis("z", "delay time due to carrier");
+          z2.tickFormat = ',.1%';
+          z2.overrideMax = 1.5;
+
+          //adding series
+          myChart2.addSeries('carrier', dimple.plot.scatter);
+          var lines2 = myChart2.addSeries('carrier', dimple.plot.line);
+          lines2.lineWeight = 1;
+
+          //coloring
+          myChart2.assignColor("American Airlines Inc.","#FF8000");
+          myChart2.assignColor("Southwest Airlines Co.","#0000FF");
+          myChart2.assignColor("United Air Lines Inc.","#FA58F4");
+          myChart2.assignColor("Delta Air Lines Inc.","#01DFA5");
+          myChart2.addLegend(30, 40, 600, 20, "right");
+          myChart2.draw();
+
+
+          //adding titles and notes
+          svg.append("text")
+            .attr("x", 80)             
+            .attr("y",310)
+            .attr("text-anchor", "left")  
+            .style("font-size", "16px") 
+            .style("text-decoration", "underline")  
+            .text('*Bubble size indicates the share of delay due to the carrier');
+          
+          svg.append("text")
+            .attr("x", 80)             
+            .attr("y",20)
+            .attr("text-anchor", "left")  
+            .style("font-size", "20px") 
+            .style("font-weight", "bold")
+            .text('Share of delayed flights by carrier');
+
+          svg2.append("text")
+            .attr("x", 80)             
+            .attr("y",20)
+            .attr("text-anchor", "left")  
+            .style("font-size", "20px") 
+            .style("font-weight", "bold")
+            .text('Share of delays because of carrier');
+        };
+      </script>
+  </head>
+
+<body>
+  <script type="text/javascript">
+    /*
+     * Use D3 to load CSV file and use `draw` callback
+     */
+    var format = d3.time.format("%Y-%m-%d");
+
+    d3.csv("data.csv", function(d) {
+        d['date']=  format.parse(d['date']);
+        d['carrier']= d['carrier_name'];
+        d['delayed flights'] = +d['delayed_flight_share'];
+        d['delay time due to carrier'] = +d['carrier_share_min'];
+        return d;
+      },draw);
+  </script>
+</body>
+</html>
