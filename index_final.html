@@ -65,7 +65,8 @@
           var lines = myChart.addSeries('carrier', dimple.plot.line);
           myChart.addSeries('carrier', dimple.plot.scatter);
           lines.lineWeight = 3;
-
+          //adding opaque circles to the first graph
+          //snippet found at http://stackoverflow.com/questions/22836594/dimple-js-change-radius-of-circles
           setTimeout(function () {
            svg.selectAll("circle")
               .attr("opacity", 0.3)
