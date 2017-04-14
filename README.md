@@ -98,6 +98,8 @@ Considering feedback I tried different options and decided not to overload one g
 
 Instead, I decided to add another graph (coincidentally  moving back to the initial R layout), which focuses just on the share of delayed minutes caused by carriers. This way, I also incorporate Vishy730 suggestion. The best way was to put graphs below each other, so each month is on the same x-coordinate. *I removed the varying circle sizes from the first graph* not to overload the visualisation, but left opaque circle marks to make it easier for the reader to hover over any particular datapoint and examine the actual values.
 
+Finally, I added a short explanation below the main title in order to help the reader grasp the context and to focus his/her attention on Delta Air Lines.
+
 The final version can be viewed at `index_final.html` or below:
 ![final](https://raw.githubusercontent.com/kanfibl/flights/master/finalversion.png)
 
