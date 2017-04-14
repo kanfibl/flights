@@ -21,7 +21,7 @@
     <script type="text/javascript">
 
       function draw(data) {
-      
+      //title and annotation
       d3.select('body')
           .append('h2')
           .attr('id', 'title')
@@ -29,9 +29,13 @@
       d3.select('body')
           .append('h3')
           .attr('id', 'annotation')
-          .text('The upper plot shows how much was the share of delayed flights for the 4 biggest US carriers in 2016. Delta Air had lower share of delayed flights throughout the year. The lower plot shows how much of delayed time was due to the carrier as opposed to other factors (weather, security, etc.). Surprisingly, Delta Airlines was consistently more "guilty" than other carriers.');
-
+         .html("The upper plot shows how much was the share of delayed flights for the 4 biggest US carriers in 2016." +  
+                "<br/>" + "Delta Air Lines had lower share of delayed flights throughout the year." + 
+                "<br/>" + "The lower plot shows how much of delayed time was due to the carrier as opposed to " +
+                "other factors (weather, security, etc.)." + 
+                "<br/>" + "Surprisingly, Delta Air Lines was consistently more 'guilty' than other carriers.");
           
+      //drawing  
           "use strict";
           var margin = 0,
               width = 1600 - margin,
@@ -57,10 +61,7 @@
           y.overrideMin = 0.05;
           y.overrideMax = 0.3;
           
-  
-
           //adding series
-          
           var lines = myChart.addSeries('carrier', dimple.plot.line);
           myChart.addSeries('carrier', dimple.plot.scatter);
           lines.lineWeight = 3;
@@ -71,19 +72,12 @@
               .attr("r", 4);
           }, 0);
 
-          
-
-          
-          
-
           //coloring
           myChart.assignColor("American Airlines Inc.","#FF8000");
           myChart.assignColor("Southwest Airlines Co.","#0000FF");
           myChart.assignColor("United Air Lines Inc.","#FA58F4");
           myChart.assignColor("Delta Air Lines Inc.","#01DFA5");
           myChart.addLegend(500, 42, 200, 200, "right");
-          
-
           myChart.draw();
 
           //adding the second graph
@@ -122,7 +116,6 @@
           myChart2.assignColor("Delta Air Lines Inc.","#01DFA5");
           myChart2.addLegend(30, 40, 600, 20, "right");
           myChart2.draw();
-
 
           //adding titles and notes
           svg.append("text")
