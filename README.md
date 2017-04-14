@@ -96,7 +96,7 @@ Overall, reviewer suggested I should highlight the fact that Delta Airlines caus
 
 Considering feedback I tried different options and decided not to overload one graphs with more colors by implementing the heatmap, as each carrier was already differentiated by color. 
 
-Instead, I decided to add another graph (coincidentally  moving back to the initial R layout), which focuses just on the share of delayed minutes caused by carriers. This way, I also incorporate Vishy730 suggestion. The best way was to put graphs below each other, so each month is on the same x-coordinate. I kept the circle sizes varying for additional clarity of the message.
+Instead, I decided to add another graph (coincidentally  moving back to the initial R layout), which focuses just on the share of delayed minutes caused by carriers. This way, I also incorporate Vishy730 suggestion. The best way was to put graphs below each other, so each month is on the same x-coordinate. *I removed the varying circle sizes from the first graph* not to overload the visualisation, but left opaque circle marks to make it easier for the reader to hover over any particular datapoint and examine the actual values.
 
 The final version can be viewed at `index_final.html` or below:
 ![final](https://raw.githubusercontent.com/kanfibl/flights/master/final.png)
